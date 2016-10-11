@@ -299,16 +299,29 @@ function SerialPortFactory(_spfOptions) {
       buffer = new Buffer(buffer);
     }
     debug('Write: '+JSON.stringify(buffer));
-    factory.SerialPortBinding.write(this.fd, buffer, function (err, results) {
-      if (callback) {
-        callback(err, results);
-      } else {
-        if (err) {
-          // console.log("write");
-          self.emit('error', err);
+    
+    var i = 0;
+    function loopTroughBuffer(){
+      factory.SerialPortBinding.write(this.fd, buffer[i], function (err, results) {
+        i++;
+        if(!err && i !== buffer.length){
+          setTimeout(function () {
+            loopTroughBuffer();
+          }, 500);
+        } else {
+          if (callback) {
+            callback(err, results);
+          } else {
+            if (err) {
+              // console.log("write");
+              self.emit('error', err);
+            }
+          }  
         }
-      }
-    });
+      });
+    }
+    
+    loopTroughBuffer();
   };
 
   if (process.platform !== 'win32') {
