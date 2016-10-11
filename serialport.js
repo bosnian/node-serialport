@@ -301,8 +301,9 @@ function SerialPortFactory(_spfOptions) {
     debug('Write: '+JSON.stringify(buffer));
     
     var i = 0;
+    var fd = this.fd;
     function loopTroughBuffer(){
-      factory.SerialPortBinding.write(this.fd, buffer[i], function (err, results) {
+      factory.SerialPortBinding.write(fd, buffer[i], function (err, results) {
         i++;
         if(!err && i !== buffer.length){
           setTimeout(function () {
