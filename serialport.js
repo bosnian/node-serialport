@@ -280,6 +280,30 @@ function SerialPortFactory(_spfOptions) {
   SerialPort.prototype.isOpen = function() {
     return (this.fd ? true : false);
   };
+  
+  SerialPort.prototype.writeSlow = function (buffer, callback) {
+    this.writeLoop(buffer, callback, 0, '');
+  };
+  
+  SerialPort.prototype.writeLoop = function (buffer, callback, count, results) {
+    var t = this;
+    
+    if(buffer.length >= count) {
+      callback(null,results);
+    } else {
+      this.write(buffer[count], function(err,res){
+        if(!err){
+          results += res;
+          count++;
+          setTimeout(function(){
+            t.writeLoop(buffer,callback,count,results);
+          },300);
+        } else {
+          callback(err,results);
+        }
+      });
+    }
+  };
 
   SerialPort.prototype.write = function (buffer, callback) {
     var self = this;
@@ -310,6 +334,7 @@ function SerialPortFactory(_spfOptions) {
       }
     });
   };
+  
 
   if (process.platform !== 'win32') {
     SerialPort.prototype._read = function () {
