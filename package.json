@@ -1,6 +1,6 @@
 {
   "name": "serialport",
-  "version": "2.0.6v2",
+  "version": "2.0.62",
   "description": "Welcome your robotic javascript overlords. Better yet, program them!",
   "author": {
     "name": "Chris Williams",
@@ -78,7 +78,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "install": "node-pre-gyp install --fallback-to-build",
+    "install": "node-pre-gyp install --build-from-source",
     "test": "grunt --verbose"
   }
 }
