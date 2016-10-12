@@ -392,6 +392,7 @@ void EIO_Write(uv_work_t* req) {
     // there wasn't an error, do the math on what we actually wrote...
     else {
       data->offset += data->result;
+      usleep(1000*500);
     }
 
     // if we get there, we really don't want to loop
